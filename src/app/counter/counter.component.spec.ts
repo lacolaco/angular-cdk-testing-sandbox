@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
 
@@ -23,15 +23,16 @@ class CounterTestHarness extends ComponentHarness {
 
 describe('CounterComponent', () => {
   let harness: CounterTestHarness;
-
-  beforeEach(async(() => {
-    TestBed.configureTestingModule({
-      declarations: [CounterComponent]
-    }).compileComponents();
-  }));
+  let fixture: ComponentFixture<CounterComponent>;
 
   beforeEach(async () => {
-    const fixture = TestBed.createComponent(CounterComponent);
+    await TestBed.configureTestingModule({
+      declarations: [CounterComponent]
+    }).compileComponents();
+  });
+
+  beforeEach(async () => {
+    fixture = TestBed.createComponent(CounterComponent);
     harness = await TestbedHarnessEnvironment.harnessForFixture(
       fixture,
       CounterTestHarness
@@ -52,5 +53,12 @@ describe('CounterComponent', () => {
     await harness.clickIncrementButton();
     const displayAfterClick = await harness.getDisplayedCount();
     expect(displayAfterClick).toBe('Count=1');
+  });
+
+  it('should display the counter inputted.', async () => {
+    fixture.componentInstance.count = 100;
+    fixture.detectChanges();
+    const display = await harness.getDisplayedCount();
+    expect(display).toBe('Count=100');
   });
 });
