@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, ɵdetectChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ɵdetectChanges } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
