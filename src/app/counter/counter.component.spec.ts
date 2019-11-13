@@ -29,15 +29,6 @@ class TestComponent {
   count = 0;
 }
 
-// Harness for wrapper component
-class TestComponentHarness extends ComponentHarness {
-  static hostSelector = '';
-  async getCounterComponent() {
-    return this.locatorFor(CounterTestHarness)();
-  }
-}
-
-
 describe('CounterComponent', () => {
   let harness: CounterTestHarness;
   let fixture: ComponentFixture<TestComponent>;
@@ -50,10 +41,7 @@ describe('CounterComponent', () => {
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(TestComponent);
-    harness = await TestbedHarnessEnvironment.harnessForFixture(
-      fixture,
-      TestComponentHarness,
-    ).then(h => h.getCounterComponent());
+    harness = await TestbedHarnessEnvironment.loader(fixture).getHarness(CounterTestHarness);
   });
 
   it('should create harness', () => {
