@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Input, ChangeDetectorRef, ɵdetectChanges } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -7,10 +7,12 @@ import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterComponent {
+
   @Input()
   count = 0;
 
   countUp() {
     this.count++;
+    ɵdetectChanges(this);
   }
 }

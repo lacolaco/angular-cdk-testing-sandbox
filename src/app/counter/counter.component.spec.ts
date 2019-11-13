@@ -1,7 +1,7 @@
-import { TestBed, ComponentFixture } from '@angular/core/testing';
 import { ComponentHarness } from '@angular/cdk/testing';
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
-
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CounterComponent } from './counter.component';
 
 class CounterTestHarness extends ComponentHarness {
@@ -21,26 +21,39 @@ class CounterTestHarness extends ComponentHarness {
   }
 }
 
+
+@Component({
+  template: `<app-counter [count]="count"></app-counter>`
+})
+class TestComponent {
+  count = 0;
+}
+
+// Harness for wrapper component
+class TestComponentHarness extends ComponentHarness {
+  static hostSelector = '';
+  async getCounterComponent() {
+    return this.locatorFor(CounterTestHarness)();
+  }
+}
+
+
 describe('CounterComponent', () => {
   let harness: CounterTestHarness;
-  let fixture: ComponentFixture<CounterComponent>;
+  let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CounterComponent]
+      declarations: [CounterComponent, TestComponent]
     }).compileComponents();
   });
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(CounterComponent);
+    fixture = TestBed.createComponent(TestComponent);
     harness = await TestbedHarnessEnvironment.harnessForFixture(
       fixture,
-      CounterTestHarness
-    );
-
-    // Harness should run change detection and return promises to wait for stable.
-    // So `detectChanges` is not needed.
-    // fixture.detectChanges();
+      TestComponentHarness,
+    ).then(h => h.getCounterComponent());
   });
 
   it('should create harness', () => {
@@ -57,7 +70,7 @@ describe('CounterComponent', () => {
 
   it('should display the counter inputted.', async () => {
     fixture.componentInstance.count = 100;
-    fixture.detectChanges();
+
     const display = await harness.getDisplayedCount();
     expect(display).toBe('Count=100');
   });
