@@ -21,12 +21,15 @@ class CounterTestHarness extends ComponentHarness {
   }
 }
 
-
 @Component({
-  template: `<app-counter [count]="count"></app-counter>`
+  template: `<app-counter [count]="count" (countUp)="onCountUp()"></app-counter>`
 })
 class TestComponent {
   count = 0;
+
+  onCountUp() {
+    this.count++;
+  }
 }
 
 describe('CounterComponent', () => {
@@ -56,9 +59,8 @@ describe('CounterComponent', () => {
     expect(displayAfterClick).toBe('Count=1');
   });
 
-  it('should display the counter inputted.', async () => {
+  it('should display the count inputted.', async () => {
     fixture.componentInstance.count = 100;
-
     const display = await harness.getDisplayedCount();
     expect(display).toBe('Count=100');
   });

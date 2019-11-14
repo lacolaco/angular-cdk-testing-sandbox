@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ɵdetectChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-counter',
@@ -11,8 +11,6 @@ export class CounterComponent {
   @Input()
   count = 0;
 
-  countUp() {
-    this.count++;
-    ɵdetectChanges(this);
-  }
+  @Output()
+  countUp = new EventEmitter<void>();
 }
